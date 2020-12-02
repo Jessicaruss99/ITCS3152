@@ -54,24 +54,7 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 
 		
 		
-        //if the button location of the target is greater than the character location aka above it
-        if (buttonLocations[targetBeltIndex] > charLocation)
-		{
-            //move up and push the button
-            mainScript.moveUp();
-			mainScript.push();
-			
-			
-		}//end if
-
-        //if the button location of the target location is less than the character location aka below it
-		else
-		{
-            //move down and push the button
-            mainScript.moveDown();
-			mainScript.push();
-			
-		} //end else
+       
 		
 		
 		//loop through belt length
@@ -94,19 +77,21 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 
                     //if the bomb speed of i is less than the bomb speed of the next one and if the bomb location of i 
 					//is greater than the bomb location of the next one aka further away
-                    if( (bombSpeeds[minIndex] < bombSpeeds[minIndex+1]) && (bombLocations[minIndex] > bombLocations[minIndex+1]) ){
+                    if( minIndex != 0 && (bombLocations[minIndex] > bombLocations[minIndex-1]) && (bombSpeeds[minIndex] < bombSpeeds[minIndex-1]) && (bombLocations[minIndex-1] < bombLocations[minIndex+1]) ){
 
-                        //add one to the minimum index
-						minIndex = i + 1;
+                        //sub one to the minimum index
+						minIndex = i - 1;
+							minDistance = curDistance;
 
                         
 					} //end if
 
                     else{
                         //if the bomb location of the previous is less than the next
-                        if(bombLocations[minIndex-1] < bombLocations[minIndex+1]){
-                            //subtract one from min index
-							minIndex = i - 1;
+                        if(minIndex != 7 && (bombLocations[minIndex] > bombLocations[minIndex+1]) && (bombSpeeds[minIndex] < bombSpeeds[minIndex+1])){
+                            //add one from min index
+							minIndex = i + 1;
+						minDistance = curDistance;
 
                             }//end if
 
@@ -118,6 +103,25 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 		
         //set the target index to the min
 		targetBeltIndex = minIndex;
+
+		 //if the button location of the target is greater than the character location aka above it
+        if (buttonLocations[targetBeltIndex] > charLocation)
+		{
+            //move up and push the button
+            mainScript.moveUp();
+			mainScript.push();
+			
+			
+		}//end if
+
+        //if the button location of the target location is less than the character location aka below it
+		else
+		{
+            //move down and push the button
+            mainScript.moveDown();
+			mainScript.push();
+			
+		} //end else
 		
 	} //end update
 }
