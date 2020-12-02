@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class AI_ScriptJessicaRuss : MonoBehaviour {
@@ -10,6 +10,8 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
     public float playerSpeed;
     public int[] beltDirections;
     public float[] buttonLocations;
+	public float[] bombLocations;
+	 public float charLocation;
     
 
 	// Use this for initialization
@@ -29,8 +31,8 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-        buttonCooldowns = mainScript.getButtonCooldowns();
+		
+		 buttonCooldowns = mainScript.getButtonCooldowns();
         beltDirections = mainScript.getBeltDirections();
         
 	
@@ -41,16 +43,17 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 		float curDistance;
 
 		bombSpeeds = mainScript.getBombSpeeds();
-		
+
 
         int targetBeltIndex =0;
         
         int beltLength =  beltDirections.Length;
 
-        public float[] bombLocations = mainScript.getBombDistances();
-        public float[] charLocation = mainScript.getCharacterLocation();
+        bombLocations = mainScript.getBombDistances();
+        charLocation = mainScript.getCharacterLocation();
 
-
+		
+		
         //if the button location of the target is greater than the character location aka above it
         if (buttonLocations[targetBeltIndex] > charLocation)
 		{
@@ -71,14 +74,14 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
 		} //end else
 		
 		
-		//loop through belt
+		//loop through belt length
 		for (int i = 0; i < beltLength; i++)
 		{
             //set current distance
 			curDistance = Mathf.Abs(buttonLocations[i] - charLocation);
 
             //if the button isnt cooling down and it is close
-			if (buttonCooldowns[i] <= 0 && (beltDirections[i] == -1 OR beltDirections[i] == 0))
+			if (buttonCooldowns[i] <= 0 && (beltDirections[i] == -1 || beltDirections[i] == 0))
 			{
                 //if the current distance is less than the minimum distance
 				if (curDistance < minDistance)
@@ -89,15 +92,15 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
                     //set the minimum distance to the current distance
 					minDistance = curDistance;
 
-                    //if the bomb speed of i is less than the bomb speed of the next one and if the bomb location of i is greater than the bomb location of the next one aka further away
-                    if( (bombSpeeds[minIndex] < bombSpeeds[minIndex+1]) AND (bombLocations[minIndex] > bombLocations[minIndex+1]) ){
+                    //if the bomb speed of i is less than the bomb speed of the next one and if the bomb location of i 
+					//is greater than the bomb location of the next one aka further away
+                    if( (bombSpeeds[minIndex] < bombSpeeds[minIndex+1]) && (bombLocations[minIndex] > bombLocations[minIndex+1]) ){
 
                         //add one to the minimum index
 						minIndex = i + 1;
 
-                        //set the minimum distance to the current distance
-						minDistance = curDistance;
-					}//end if
+                        
+					} //end if
 
                     else{
                         //if the bomb location of the previous is less than the next
@@ -105,8 +108,6 @@ public class AI_ScriptJessicaRuss : MonoBehaviour {
                             //subtract one from min index
 							minIndex = i - 1;
 
-                            //set minimum distance to current
-							minDistance = curDistance;
                             }//end if
 
                     }//end else
